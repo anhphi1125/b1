@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// mongodb+srv://anhphi1125:sOnpaJWXXs7nolvX@cluster0.10l8k.mongodb.net/
+
 //connect database
 mongoose.connect('mongodb+srv://anhphi1125:jDlCugMnnvyiYLOR@cluster0.10l8k.mongodb.net/')
   .then(() => console.log('>>>>>>>>>> DB Connected!!!!!!'))

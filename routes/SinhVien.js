@@ -10,12 +10,11 @@ const e = require("express");
 //localhost:3000/sinhvien/all
 router.get("/all", async function (req, res) {
     try {
-
         const token = req.header("Authorization").split(' ')[1];
         if (token) {
             JWT.verify(token, config.SECRETKEY, async function (err, id) {
                 if (err) {
-                    res.status(403).json({ status: false, message: "Đã có lỗi xảy ra" + err});
+                    res.status(403).json({ status: false, message: "Đã có lỗi xảy ra " + err});
                 } else {
                     //xử lý chức năng tương ứng với API
                     var list = await sinhvienModel.find();
@@ -224,7 +223,7 @@ router.post("/login", async function (req, res) {
         if (checkUser == null) {
             res.status(200).json({ status: false, message: "Đăng nhập không thành công" });
         } else {
-            const token = JWT.sign({ mssv: username }, config.SECRETKEY, { expiresIn: '30s' });
+            const token = JWT.sign({ mssv: username }, config.SECRETKEY, { expiresIn: '1h' });
             const refreshToken = JWT.sign({ mssv: username }, config.SECRETKEY, { expiresIn: '1h' });
             res.status(200).json({ status: true, message: "Đăng nhập thành công", token: token, refreshToken: refreshToken });
         }
