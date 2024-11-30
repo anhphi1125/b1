@@ -4,7 +4,7 @@ var router = express.Router();
 var sinhvienModel = require("../models/SinhVienModel");
 const JWT = require('jsonwebtoken');
 const config = require("../ultil/tokenConfig");
-const e = require("express");
+// const e = require("express");
 
 // - Lấy toàn bộ danh sách sinh viên
 //localhost:3000/sinhvien/all
