@@ -118,10 +118,10 @@ router.get('/thongketheoloai', async (req, res) => {
         for (let i = 0; i < stats.length; i++) {
             const category = stats[i].category;
 
-            if (result[category]) {
-                result[category] += 1;
+            if (result[`${category}`]) {
+                result[`${category}`] += 1;
             } else {
-                result[category] = 1;
+                result[`${category}`] = 1;
             }
         }
 
