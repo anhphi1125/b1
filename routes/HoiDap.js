@@ -79,14 +79,19 @@ router.delete('/delete/:id', async (req, res) => {
 // 6. GET /questions/search (Tìm kiếm câu hỏi theo thể loại)
 router.get('/questions/search', async (req, res) => {
     try {
-        const { loai} = req.query;
-        const questions = await hoidapModel.find({ loai: loai});
+        const { loai } = req.query;
+        if (!loai) {
+            return res.status(400).json({ status: false, message: 'Thể loại không được cung cấp' });
+        }
+        const questions = await hoidapModel.find({ loai: loai });
+        if (questions.length === 0) {
+            return res.status(404).json({ status: false, message: 'Không tìm thấy câu hỏi nào với thể loại này' });
+        }
         res.status(200).json(questions);
     } catch (err) {
-        res.status(400).json({ status: false, message: 'Có lỗi xảy ra' + err});
+        res.status(500).json({ status: false, message: 'Có lỗi xảy ra: ' + err.message });
     }
 });
-
 // 7. POST /questions/{id}/answer (Thêm câu trả lời cho câu hỏi)
 router.put('/editTraLoi', async (req, res) => {
     try {
