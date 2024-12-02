@@ -77,7 +77,7 @@ router.delete('/delete/:id', async (req, res) => {
 });
 
 // 6. GET /questions/search (Tìm kiếm câu hỏi theo thể loại)
-router.get('/questions/search', async (req, res) => {
+router.get('/searchCate', async (req, res) => {
     try {
         const { loai } = req.query;
         if (!loai) {
