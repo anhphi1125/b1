@@ -93,19 +93,19 @@ router.get('/searchCate', async (req, res) => {
     }
 });
 // 7. POST /questions/{id}/answer (Thêm câu trả lời cho câu hỏi)
-router.put('/editTraLoi', async (req, res) => {
+router.get('/searchCauhoi', async (req, res) => {
     try {
-        const { id, traloi} = req.body;
-        const updatedQuestion = await hoidapModel.findById(id);
-        if (updatedQuestion) {
-            updatedQuestion.traloi = traloi ? traloi : updatedQuestion.traloi;
-            await updatedQuestion.save();
-            res.status(200).json({ status: true, message: "Đã sửa thành công" });
-        } else {
-            res.status(404).json({ status: false, message: "Không tìm thấy sản phẩm" });
+        const { cauhoi } = req.query;
+        if (!cauhoi) {
+            return res.status(400).json({ status: false, message: 'Câu hỏi không được cung cấp' });
         }
+        const questions = await hoidapModel.find({ cauhoi: cauhoi });
+        if (questions.length === 0) {
+            return res.status(404).json({ status: false, message: 'Không tìm thấy câu hỏi nào !!!' });
+        }
+        res.status(200).json(questions);
     } catch (err) {
-        res.status(400).json({ status: false, message: 'Có lỗi xảy ra' });
+        res.status(500).json({ status: false, message: 'Có lỗi xảy ra: ' + err.message });
     }
 });
 
