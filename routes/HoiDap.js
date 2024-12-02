@@ -7,8 +7,8 @@ var hoidapModel = require("../models/HoiDapModel");
 // 1. POST /questions (Tạo mới câu hỏi)
 router.post('/add', async (req, res) => {
     try {
-        const { question, answer, category } = req.body;
-        const newQuestion = new hoidapModel({ question, answer, category });
+        const { cauhoi, traloi, loai } = req.body;
+        const newQuestion = new hoidapModel({ cauhoi, traloi, loai });
         await hoidapModel.create(newQuestion);
         res.status(200).json({ status: true, message: 'Thêm thành công' })
     } catch (err) {
