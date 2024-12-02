@@ -39,7 +39,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/products', productRouter);
 app.use('/sinhvien', sinhvienRouter);
-app.use('/danhgia', hoidapRouter);
+app.use('/hoidap', hoidapRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
