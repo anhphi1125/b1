@@ -8,4 +8,4 @@ const hoidap = new Schema({
     loai: {type: String},
     luu: {type: Boolean, default: false}
 });
-module.exports = mongoose.models.hoidap || mongoose.model("hoidap", danhgia);
+module.exports = mongoose.models.hoidap || mongoose.model("hoidap", hoidap);
