@@ -54,7 +54,7 @@ router.put('/edit', async (req, res) => {
             await updatedQuestion.save();
             res.status(200).json({ status: true, message: "Đã sửa thành công" });
         } else {
-            res.status(404).json({ status: false, message: "Không tìm thấy sản phẩm" });
+            res.status(404).json({ status: false, message: "Không tìm thấy sản phẩm" + updatedQuestion});
         }
     } catch (err) {
         res.status(400).json({ status: false, message: 'Có lỗi xảy ra' });
@@ -83,7 +83,7 @@ router.get('/questions/search', async (req, res) => {
         const questions = await hoidapModel.find({ loai: loai});
         res.status(200).json(questions);
     } catch (err) {
-        res.status(400).json({ status: false, message: 'Có lỗi xảy ra' });
+        res.status(400).json({ status: false, message: 'Có lỗi xảy ra' + err});
     }
 });
 
