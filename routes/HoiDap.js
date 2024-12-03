@@ -4,7 +4,7 @@ var router = express.Router();
 var hoidapModel = require("../models/HoiDapModel");
 
 
-// 1. POST /questions (Tạo mới câu hỏi)
+// 1.(Tạo mới câu hỏi)
 router.post('/add', async (req, res) => {
     try {
         const { cauhoi, traloi, loai } = req.body;
@@ -16,7 +16,7 @@ router.post('/add', async (req, res) => {
     }
 });
 
-// 2. GET /questions (Lấy danh sách câu hỏi)
+// 2.(Lấy danh sách câu hỏi)
 router.get('/dscauhoi', async (req, res) => {
     try {
         var list = await hoidapModel.find().select("_id cauhoi");
@@ -26,7 +26,7 @@ router.get('/dscauhoi', async (req, res) => {
     }
 });
 
-// 3. GET /questions/{id} (Lấy chi tiết câu hỏi)
+// 3.(Lấy chi tiết câu hỏi)
 router.get('/questions/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -42,7 +42,7 @@ router.get('/questions/:id', async (req, res) => {
     }
 });
 
-// 4. PUT /questions/{id} (Cập nhật câu hỏi)
+// 4.(Cập nhật câu hỏi)
 router.put('/edit', async (req, res) => {
     try {
         const { id, cauhoi, traloi, loai } = req.body;
@@ -61,7 +61,7 @@ router.put('/edit', async (req, res) => {
     }
 });
 
-// 5. DELETE /questions/{id} (Xóa câu hỏi)
+// 5.(Xóa câu hỏi)
 router.delete('/delete/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -76,7 +76,7 @@ router.delete('/delete/:id', async (req, res) => {
     }
 });
 
-// 6. GET /questions/search (Tìm kiếm câu hỏi theo thể loại)
+// 6. (Tìm kiếm câu hỏi theo thể loại)
 router.get('/searchCate', async (req, res) => {
     try {
         const { loai } = req.query;
@@ -92,7 +92,8 @@ router.get('/searchCate', async (req, res) => {
         res.status(500).json({ status: false, message: 'Có lỗi xảy ra: ' + err.message });
     }
 });
-// 7. POST /questions/{id}/answer (Thêm câu trả lời cho câu hỏi)
+
+// 7 (tìm kiếm câu hỏi theo câu hỏi)
 router.get('/searchCauhoi', async (req, res) => {
     try {
         const { cauhoi } = req.query;
@@ -109,29 +110,39 @@ router.get('/searchCauhoi', async (req, res) => {
     }
 });
 
-// 8. GET /questions/stats (Thống kê số lượng câu hỏi theo thể loại)
+// 8.(Thống kê số lượng câu hỏi theo thể loại)
 router.get('/thongketheoloai', async (req, res) => {
     try {
-        const stats = await hoidapModel.find();
-        const result = {};
-
-        for (let i = 0; i < stats.length; i++) {
-            const category = stats[i].category;
-
-            if (result[`${category}`]) {
-                result[`${category}`] += 1;
-            } else {
-                result[`${category}`] = 1;
+        const questions = await hoidapModel.find();  
+        let lichsuCount = 0;
+        let amthucCount = 0;
+        let khoahocCount = 0;
+        let dialyCount = 0;
+        questions.forEach(question => {
+            if (question.loai === "Lịch sử") {
+                lichsuCount++;
+            } else if (question.loai === "Ẩm thực") {
+                amthucCount++;
+            } else if (question.loai === "Khoa học") {
+                khoahocCount++;
+            } else if (question.loai === "Địa lý") {
+                dialyCount++;
             }
-        }
-
-        res.status(200).json(result);
+        });
+        res.status(200).json({
+            data: {
+                "Lịch sử": lichsuCount,
+                "Ẩm thực": amthucCount,
+                "Khoa học": khoahocCount,
+                "Địa lý": dialyCount
+            }
+        });
     } catch (err) {
         res.status(400).json({ status: false, message: 'Có lỗi xảy ra' });
     }
 });
 
-// 9. PUT /questions/{id}/archive (Lưu trữ câu hỏi)
+// 9. (Lưu trữ câu hỏi)
 router.put('/luutru', async (req, res) => {
     try {
         const { id } = req.body; 
@@ -149,6 +160,18 @@ router.put('/luutru', async (req, res) => {
     }
 });
 
-// 10.
+// 10. (lấy những câu hỏi đã lưu)
+router.get("/dsLuu", async (req, res) => {
+    try {
+        const hasLuu = await hoidapModel.find({luu: true});
+        if(hasLuu.length == 0){
+            res.status(404).json({ status: false, message: "Chưa có câu hỏi nào được lưu" });
+        }else{
+            res.status(200).json(hasLuu);
+        }
+    } catch (error) {
+        res.status(400).json({ status: false, message: 'Có lỗi xảy ra' });
+    }
+});
 
 module.exports = router;
